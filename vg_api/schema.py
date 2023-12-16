@@ -27,9 +27,6 @@ class GenerateVGCTeam(graphene.relay.ClientIDMutation):
             graphene.String,
             required=True
         )
-        date_reference = graphene.Date(
-            required=True
-        )
 
     def mutate_and_get_payload(self, info, **kwargs):
         seed = [i.title() for i in kwargs['seed']]
@@ -37,10 +34,7 @@ class GenerateVGCTeam(graphene.relay.ClientIDMutation):
         if not seed:
             raise Exception('A pokemon name is required as seed.')
 
-        year, month, _ = str(kwargs['date_reference']).split('-')
-        url = f'https://www.smogon.com/stats/{year}-{month}/moveset/gen9vgc{year}regulatione-1760.txt'
-        team = generate_team(url, seed)
-
+        team = generate_team(seed)
         return GenerateVGCTeam(team)
 
 

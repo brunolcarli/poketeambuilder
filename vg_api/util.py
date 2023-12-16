@@ -1,3 +1,4 @@
+import pickle
 import random
 from collections import defaultdict
 from itertools import combinations
@@ -270,6 +271,13 @@ def fit(model, X, y):
 
     return model
 
+# Auxiliary functions to define model
+def ddic_aux():
+    return 0
+
+def ddic():
+    return defaultdict(ddic_aux)
+
 def get_teammates_model(stats, df):
     # Generate Pokemon combinations
     meta = df.NAME.unique()
@@ -277,7 +285,7 @@ def get_teammates_model(stats, df):
     list_combinations += list(combinations(meta, 1))
     list_combinations += list(combinations(meta, 2))
 
-    mates_model = defaultdict(lambda: defaultdict(lambda: 0))
+    mates_model = defaultdict(ddic)
 
     for comb in list_combinations:
         mates_model[comb] = {}
@@ -319,7 +327,6 @@ def teambuild(team, model):
 
 def build_moveset(team, stats):
     result = {'members': []}
-
     team_items = []
     for mate in team:
         pokemon = {
@@ -342,9 +349,9 @@ def build_moveset(team, stats):
         result['members'].append(pokemon)
     return result
 
-def generate_team(url, seed):
-    r = requests.get(url)
-    stats, df = get_stats(r.text, r.url)
-    model = get_teammates_model(stats, df)
-    team = teambuild(seed, model)
-    return build_moveset(team, stats)
+def generate_team(seed):
+    with open('poketeambuilder/lm_models/vgc_regE_2023_11.model', 'rb') as pk:
+        dump_data = pickle.load(pk)
+
+    team = teambuild(seed, dump_data['model'])
+    return build_moveset(team, dump_data['stats'])

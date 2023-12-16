@@ -8,3 +8,6 @@ django-cors-headers==3.0.2
 sqlparse==0.4.1
 mysql-connector-python==8.0.32
 django-mysql
+
+pandas
+requests

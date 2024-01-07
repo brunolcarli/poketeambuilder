@@ -350,7 +350,7 @@ def build_moveset(team, stats):
     return result
 
 def generate_team(seed):
-    with open('poketeambuilder/lm_models/vgc_regE_2023_11.model', 'rb') as pk:
+    with open('poketeambuilder/lm_models/vgc_regF_2023_12.model', 'rb') as pk:
         dump_data = pickle.load(pk)
 
     team = teambuild(seed, dump_data['model'])
